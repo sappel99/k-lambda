@@ -1,0 +1,32 @@
+{
+  "Comment": "State Machine für parallele Verarbeitung von Samarati-Vektoren",
+  "StartAt": "mainStep1",
+  "States": {
+    "mainStep1": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-central-1:430118850455:function:mainStep1",
+      "Next": "MapState"
+    },
+    "MapState": {
+      "Type": "Map",
+      "ItemsPath": "$",
+      "MaxConcurrency": 100,
+      "Iterator": {
+        "StartAt": "satisfiesStep2",
+        "States": {
+          "satisfiesStep2": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:eu-central-1:430118850455:function:satisfiesStep2",
+            "End": true
+          }
+        }
+      },
+      "Next": "collectStep3"
+    },
+    "collectStep3": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-central-1:430118850455:function:collectStep3",
+      "End": true
+    }
+  }
+}
