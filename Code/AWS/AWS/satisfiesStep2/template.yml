@@ -1,0 +1,67 @@
+# Diese AWS-SAM-Vorlage wurde aus der Konfiguration Ihrer Funktion generiert. Wenn
+# Ihre Funktion einen oder mehrere Auslöser hat, beachten Sie, dass die mit diesen
+# Auslösern verbundenen AWS-Ressourcen in dieser Vorlage nicht vollständig
+# spezifiziert sind und Platzhalterwerte enthalten. Öffnen Sie diese Vorlage in
+# AWS Infrastructure Composer oder Ihrer bevorzugten IDE und ändern Sie sie, um
+# eine Serverless-Anwendung mit anderen AWS-Ressourcen anzugeben.
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  satisfiesStep2:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Description: ''
+      MemorySize: 3008
+      Timeout: 900
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      Layers:
+        - !Ref Layer1
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+                - s3:DeleteObject
+                - s3:ListBucket
+              Resource:
+                - arn:aws:s3:::samarati/*
+                - arn:aws:s3:::samarati
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:eu-central-1:430118850455:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:eu-central-1:430118850455:log-group:/aws/lambda/satisfiesStep2:*
+      RecursiveLoop: Terminate
+      SnapStart:
+        ApplyOn: PublishedVersions
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+  # This resource represents your Layer with name custom_layer2. To download the
+# content of your Layer, go to
+# 
+# aws.amazon.com/go/view?arn=arn%3Aaws%3Alambda%3Aeu-central-1%3A430118850455%3Alayer%3Acustom_layer2%3A2&source=lambda
+  Layer1:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./custom_layer2
+      LayerName: custom_layer2
+      CompatibleRuntimes:
+        - python3.12
