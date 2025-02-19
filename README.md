@@ -1,61 +1,87 @@
-# Data Privacy
+# Masterarbeit: Performance- und Nutzbarkeitsvergleich von k-Anonymisierung (Samarati) in Python und AWS Lambda
 
-## Experiments
+## Projektbeschreibung
 
-### K-Anonymity
+Dieses Projekt untersucht die k-Anonymisierung nach dem Samarati-Ansatz und vergleicht die Performance sowie die Nutzbarkeit einer lokalen Python-Implementierung mit zwei Varianten einer AWS Lambda Implementierung.
 
-- Samarati
+Ziel der Arbeit ist es, herauszufinden, welche Implementierung effizienter und benutzerfreundlicher ist, insbesondere im Kontext von großen Patientendatensätzen und komplexen Generalisierungshierarchien.
 
-- Mondrian
+## Motivation
 
-### Privacy Preserving Federated Learning
+k-Anonymisierung ist eine weit verbreitete Technik zum Schutz von personenbezogenen Daten, insbesondere im medizinischen Bereich. Während lokale Implementierungen einfach zu entwickeln und zu testen sind, bieten Cloud-basierte Lösungen wie AWS Lambda eine potenziell bessere Skalierbarkeit und Performance.
 
-- Differential Privacy
+Dieses Projekt vergleicht:
 
-  - Gaussian Mechanism
+- **Lokale Implementierung**: Basierend auf einem Fork von [data-privacy](https://github.com/ltzheng/data-privacy).
+- **AWS Lambda Implementierungen**:
+  - **AWS-V1**: Mit einer normalen Map und minimalem Einsatz von S3.
+  - **AWS-V2**: Mit einer DistributedMap zur Unterstützung von mehr Quasi-Identifikatoren und größeren Patientendatensätzen.
 
-- Secure Multi-Party Computation
+## Projektstruktur
 
-  - Paillier Homomorphic Encryption
+```plaintext
+.
+├── Code
+│   ├── Lokal          # Lokale Python Implementierung (geforkt und adaptiert)
+│   └── AWS
+│       ├── V1         # Erste AWS-Implementierung mit normaler Map und wenig S3 Nutzung
+│       └── V2         # Erweiterung mit DistributedMap für größere Datenmengen
+│
+├── Input
+│   ├── Generalization # Generalisierungshierarchien der Quasi-Identifier
+│   └── Patients       # CSV-Dateien mit Patientendaten
+│
+└── Output
+    ├── Dataframes     # Ergebnisdaten aus Performance- und Nutzbarkeitsvergleich
+    ├── Plot           # Visualisierung der Performance- und Nutzbarkeitsdaten
+    └── Tabelle        # Beispiele anonymisierter Tabellen
+```
 
-Detailed reports are inside the two directories.
+## Implementierungsdetails
 
-## Assignments
+### 1. Lokale Implementierung
+- Basierend auf einem Fork des Repos [data-privacy](https://github.com/ltzheng/data-privacy)
+- Anpassungen zur Unterstützung der Generalisierungshierarchien und zur Auswertung von Performance und Nutzbarkeit
 
-### HW1: Basics of Privacy
+### 2. AWS Implementierungen
+- **AWS-V1**:
+  - Verwendung einer normalen Map zur Datenverarbeitung
+  - Minimale Nutzung von S3 zur Datenspeicherung
+  - Fokus auf Einfachheit und schnelle Umsetzung
+- **AWS-V2**:
+  - Einsatz einer DistributedMap zur Parallelisierung und Skalierung
+  - Bessere Unterstützung für mehr Quasi-Identifier und größere Patientendatensätze
+  - Optimierte Nutzung von S3 für Input und Output
 
-- (c, l)-diversity
+## Inputdaten
 
-- quasi-identifier & full domain generalization & suppression
+- **Patients**: CSV-Dateien mit Patientendaten, die für die k-Anonymisierung verwendet werden.
+- **Generalization**: Generalisierungshierarchien der Quasi-Identifier (z.B. Alter, PLZ, Geschlecht).
 
-- t-closeness & Earth Mover's distance
+## Outputdaten
 
-- k-anonymity
+- **Dataframes**: Daten, die aus dem Performance- und Nutzbarkeitsvergleich resultieren.
+- **Plot**: Visualisierte Ergebnisse zur besseren Interpretation der Performance- und Nutzbarkeitsdaten.
+- **Tabelle**: Beispiele anonymisierter Tabellen, die aus den verschiedenen Implementierungen resultieren.
 
-- prior and posterior probabilities & mutual information
+## Ergebnisse und Auswertung
 
-- (α, β)-privacy & γ-amplifying
+Die Ergebnisse der Arbeit sind in Form von Dataframes und Visualisierungen im Ordner `Output` zu finden. Die Auswertung umfasst:
+- Performance-Vergleich der lokalen Implementierung und der beiden AWS-Varianten.
+- Vergleich der Nutzbarkeit hinsichtlich Skalierbarkeit, Flexibilität und Benutzerfreundlichkeit.
+- Beispiele anonymisierter Tabellen zur Veranschaulichung der Datenveränderung.
 
-### HW2: Differential Privacy (DP)
+## Voraussetzungen
 
-- (ε, δ)-DP
+- Python 3.x
+- AWS Account mit Berechtigungen für Lambda und S3
+- Abhängigkeiten aus `requirements.txt` (im Ordner `Code`)
 
-- local DP
+## Installation und Ausführung
 
-- sensitivity; laplace, gussian, and exponential mechanisms
-
-- composition theorem & advanced composition theorem
-
-- random subsampling
-
-### HW3: Cryptography & Security
-
-- one time pad
-
-- interchangeble libraries
-
-- negligible functions
-
-- pseudo random generator (PRG)
-
-- RSA
+### Lokale Implementierung
+```bash
+cd Code/Lokal
+pip install -r requirements.txt
+python main.py
+```
